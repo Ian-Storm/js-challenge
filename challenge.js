@@ -35,7 +35,7 @@ var textarray = [
     "Nederland moet meer geld uitgeven voor de ontwikkeling van arme landen.",
     "Nederland moet uit de Europese Unie (EU) stappen."
 ];
-var awnsers = [];
+var answers = [];
 
 
 window.onload = function() {
@@ -52,25 +52,31 @@ window.onload = function() {
 
 	backBtn.addEventListener("click", questionAdd);
 
+	yes.addEventListener("click", answer);
+	idk.addEventListener("click", answer);
+	no.addEventListener("click", answer);
+	skip.addEventListener("click", answer);
+
 	function start(){
 		document.getElementById("startSection").classList.add("hidden");
 		document.getElementById("mainSection").classList.remove("hidden"); 
-		//question();
+		question();
 	}
 
-	function awnser(){
-		console.log("hallo")
+	function answer(pushedanswer){
+		answers.push(pushedanswer);
+		question();
 	}
 
 	function question(){
-		questionadd();
+		questionAdd();
 		title.innerHTML = titlearray[number];
 		text.innerHTML = textarray[number];
-		back.setattribute("onclick","javascript:questionadd()");
+		//back.setAttribute("onclick","javascript:questionAdd()");
 	}
 
 	function questionAdd(){
-		if (number < 30) {
+		if (number < 28) {
 			return number ++;
 		}
 	}
