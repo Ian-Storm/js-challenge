@@ -2,7 +2,7 @@ var number = -1;
 var title = document.getElementById("title");
 var titlearray = ["Bindend referendum", "Maatschappelijke dienstplicht", "Anoniem solliciteren", "Groepsbelediging", "Teelt en verkoop wiet", " Vervroegde vrijlating", "Vennootschapsbelasting", 
             "Belasting hoogste inkomens", "Tijdelijke arbeidscontracten", "AOW-leeftijd 65","Verzekering zzp'ers", "Leenstelsel studenten", "Geld cultuur", "Islamitische immigranten","Kinderpardon","Onderdak illegalen","Hypotheekrente",
-            "Verhuurdersheffing","Schiphol","Kilometerheffing","Nieuwe wegen","Kolencentrales","Btw-tarief vlees","Voltooid leven","Landelijk zorgfonds","Defensie-uitgaven","Europees leger","Ontwikkelingshulp","EU-lidmaatschap"];
+            "Verhuurdersheffing","Schiphol","Kilometerheffing","Nieuwe wegen","Kolencentrales","Btw-tarief vlees","Voltooid leven","Afschaffing eigen risico","Landelijk zorgfonds","Defensie-uitgaven","Europees leger","Ontwikkelingshulp","EU-lidmaatschap"];
 var text = document.getElementById("text");
 var textarray = [
     "Er moet een bindend referendum komen, waarmee burgers door het parlement aangenomen wetten kunnen tegenhouden.",
@@ -29,6 +29,7 @@ var textarray = [
     "Alle kolencentrales mogen voorlopig open blijven.",
     "Voor vlees moet het hoge btw-tarief van 21 procent gaan gelden.",
     "Ouderen die vinden dat hun leven voltooid is moeten hulp kunnen krijgen om een einde aan hun leven te maken.",
+    "Het eigen risico in de zorg moet worden afgeschaft, ook als dat betekent dat de premies omhoog gaan.",
     "Er moet een landelijk zorgfonds komen, zodat het stelsel van particuliere zorgverzekeraars kan verdwijnen.",
     "De uitgaven voor defensie moeten de komende jaren fors omhoog naar 2 procent van het nationale inkomen (de NAVO-norm).",
     "Er moet een Europees leger komen.",
@@ -50,12 +51,12 @@ window.onload = function() {
 
 	startBtn.addEventListener("click", start);
 
-	backBtn.addEventListener("click", questionAdd);
+	backBtn.addEventListener("click", changer);
 
-	yes.addEventListener("click", answer);
-	idk.addEventListener("click", answer);
-	no.addEventListener("click", answer);
-	skip.addEventListener("click", answer);
+	yes.addEventListener("click", function(){answer("y");});
+	idk.addEventListener("click", function(){answer("i");});
+	no.addEventListener("click", function(){answer("n");});
+	skip.addEventListener("click", function(){answer("s");});
 
 	function start(){
 		document.getElementById("startSection").classList.add("hidden");
@@ -64,7 +65,8 @@ window.onload = function() {
 	}
 
 	function answer(pushedanswer){
-		answers.push(pushedanswer);
+		answers[number] = pushedanswer;
+		console.log(pushedanswer);
 		question();
 	}
 
@@ -72,12 +74,27 @@ window.onload = function() {
 		questionAdd();
 		title.innerHTML = titlearray[number];
 		text.innerHTML = textarray[number];
-		//back.setAttribute("onclick","javascript:questionAdd()");
+	}
+
+	function changer(){
+		questionBack();
+		title.innerHTML = titlearray[number];
+		text.innerHTML = textarray[number];
 	}
 
 	function questionAdd(){
-		if (number < 28) {
+		if (number < 29) {
 			return number ++;
 		}
 	}
+
+	function questionBack(){
+		if (number < 30 && number > -1) {
+			console.log(number);
+			return number--;
+		}
+	}
 }
+ //klik kijken welk nummer hij is
+ //if number == 0 dan terug naar 'start menu'
+ //anders 1 terug
