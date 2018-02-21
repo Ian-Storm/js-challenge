@@ -1,6 +1,7 @@
 var number = -1;
 var title = document.getElementById("title");
-var titlearray = ["Bindend referendum", "Maatschappelijke dienstplicht", "Anoniem solliciteren", "Groepsbelediging", "Teelt en verkoop wiet", " Vervroegde vrijlating", "Vennootschapsbelasting", 
+var titlearray = [
+			"Bindend referendum", "Maatschappelijke dienstplicht", "Anoniem solliciteren", "Groepsbelediging", "Teelt en verkoop wiet", " Vervroegde vrijlating", "Vennootschapsbelasting", 
             "Belasting hoogste inkomens", "Tijdelijke arbeidscontracten", "AOW-leeftijd 65","Verzekering zzp'ers", "Leenstelsel studenten", "Geld cultuur", "Islamitische immigranten","Kinderpardon","Onderdak illegalen","Hypotheekrente",
             "Verhuurdersheffing","Schiphol","Kilometerheffing","Nieuwe wegen","Kolencentrales","Btw-tarief vlees","Voltooid leven","Afschaffing eigen risico","Landelijk zorgfonds","Defensie-uitgaven","Europees leger","Ontwikkelingshulp","EU-lidmaatschap"];
 var text = document.getElementById("text");
@@ -38,15 +39,15 @@ var textarray = [
 ];
 var answers = [];
 
-
 window.onload = function() {
 
-	var startBtn = document.getElementById("start")
-	var backBtn = document.getElementById("back")
-	var yes = document.getElementById("yes")
-	var idk = document.getElementById("idk")
-	var no = document.getElementById("no")
-	var skip = document.getElementById("skip") 
+	var startBtn = document.getElementById("start");
+	var backBtn = document.getElementById("back");
+	var yes = document.getElementById("yes");
+	var idk = document.getElementById("idk");
+	var no = document.getElementById("no");
+	var skip = document.getElementById("skip");
+	var restart = document.getElementById("restart");
 
 
 	startBtn.addEventListener("click", start);
@@ -57,14 +58,17 @@ window.onload = function() {
 	idk.addEventListener("click", function(){answer("i");});
 	no.addEventListener("click", function(){answer("n");});
 	skip.addEventListener("click", function(){answer("s");});
+	restart.addEventListener("click", restartt);
 
 	function start(){
 		document.getElementById("startSection").classList.add("hidden");
-		document.getElementById("mainSection").classList.remove("hidden"); 
+		document.getElementById("mainSection").classList.remove("hidden");
+		document.getElementById("backSection").classList.remove("hidden");
 		question();
 	}
 
 	function answer(pushedanswer){
+		clearer();
 		answers[number] = pushedanswer;
 		console.log(pushedanswer);
 		question();
@@ -72,19 +76,44 @@ window.onload = function() {
 
 	function question(){
 		questionAdd();
-		title.innerHTML = titlearray[number];
+		title.innerHTML = ''+ (number+1) + ". " + titlearray[number];
 		text.innerHTML = textarray[number];
+	}
+
+	function clearer(){
+		yes.className = "";
+		idk.className = "";
+		no.className = "";
+		skip.className = "";
 	}
 
 	function changer(){
 		questionBack();
-		title.innerHTML = titlearray[number];
-		text.innerHTML = textarray[number];
+		clearer();
+		if (number != -1) { 
+			if (answers[number]=='y'){
+				yes.className = 'last';
+			} else if (answers[number]=='i'){
+				idk.className = 'last';
+			} else if (answers[number]=='n'){
+				no.className = 'last';
+			}
+			title.innerHTML = ''+ (number+1) + ". " + titlearray[number];
+			text.innerHTML = textarray[number];
+		} else {
+			document.getElementById("mainSection").classList.add("hidden"); 
+			document.getElementById("startSection").classList.remove("hidden");
+			document.getElementById("backSection").classList.add("hidden");
+		}
 	}
 
 	function questionAdd(){
 		if (number < 29) {
 			return number ++;
+		} else if (number == 29) {
+			document.getElementById("mainSection").classList.add("hidden");
+			number++;
+			addElement();
 		}
 	}
 
@@ -92,9 +121,26 @@ window.onload = function() {
 		if (number < 30 && number > -1) {
 			console.log(number);
 			return number--;
+		} else if (number == 30) {
+			number--;
+			document.getElementById("mainSection").classList.remove	("hidden");
+			title.innerHTML = ''+ (number+1) + ". " + titlearray[number];
+			text.innerHTML = textarray[number];
+		}
+	}
+
+	function restartt() {
+		location.reload(true);
+	}
+
+	function addElement() {
+		for (var i = 0; i < getTotalAmountOfPartys(); i++) {
+		var p = document.createElement("p");
+		var tr = document.createElement("tr");
+		var input = document.createElement("input");
+		input.type = 'checkbox';
+		input.value = parties[i].name;
+		input.classListAdd("partyChecker");
 		}
 	}
 }
- //klik kijken welk nummer hij is
- //if number == 0 dan terug naar 'start menu'
- //anders 1 terug
