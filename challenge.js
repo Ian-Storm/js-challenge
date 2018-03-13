@@ -1,4 +1,4 @@
-var number = -1;
+	var number = -1;
 var title = document.getElementById("title");
 var titlearray = [
 			"Bindend referendum", "Maatschappelijke dienstplicht", "Anoniem solliciteren", "Groepsbelediging", "Teelt en verkoop wiet", " Vervroegde vrijlating", "Vennootschapsbelasting", 
@@ -38,6 +38,9 @@ var textarray = [
     "Nederland moet uit de Europese Unie (EU) stappen."
 ];
 var answers = [];
+var data = [];
+var multiultraplier = [];
+var sortparty = "all";
 
 window.onload = function() {
 
@@ -48,7 +51,8 @@ window.onload = function() {
 	var no = document.getElementById("no");
 	var skip = document.getElementById("skip");
 	var restart = document.getElementById("restart");
-
+	var list = document.getElementById("list");
+	var questionWeight = document.getElementById("questionWeight");
 
 	startBtn.addEventListener("click", start);
 
@@ -59,6 +63,13 @@ window.onload = function() {
 	no.addEventListener("click", function(){answer("n");});
 	skip.addEventListener("click", function(){answer("s");});
 	restart.addEventListener("click", restartt);
+	if (questionWeight.checked){
+		yes.addEventListener("click", function(){answer("y","x2");});
+		idk.addEventListener("click", function(){answer("i","x2");});
+		no.addEventListener("click", function(){answer("n","x2");});
+		skip.addEventListener("click", function(){answer("s","x2");});
+		restart.addEventListener("click", restartt);
+	}
 
 	function start(){
 		document.getElementById("startSection").classList.add("hidden");
@@ -67,8 +78,11 @@ window.onload = function() {
 		question();
 	}
 
-	function answer(pushedanswer){
+	function answer(pushedanswer, multiplier = null){
 		clearer();
+		if (multiplier === "x2") {
+			multiultraplier[number] = pushedanswer;
+		}
 		answers[number] = pushedanswer;
 		console.log(pushedanswer);
 		question();
@@ -101,7 +115,7 @@ window.onload = function() {
 			title.innerHTML = ''+ (number+1) + ". " + titlearray[number];
 			text.innerHTML = textarray[number];
 		} else {
-			document.getElementById("mainSection").classList.add("hidden"); 
+			document.getElementById("mainSection").classList.add("hidden");
 			document.getElementById("startSection").classList.remove("hidden");
 			document.getElementById("backSection").classList.add("hidden");
 		}
@@ -129,18 +143,109 @@ window.onload = function() {
 		}
 	}
 
-	function restartt() {
+	function restartt(){
 		location.reload(true);
 	}
 
-	function addElement() {
-		for (var i = 0; i < getTotalAmountOfPartys(); i++) {
-		var p = document.createElement("p");
-		var tr = document.createElement("tr");
-		var input = document.createElement("input");
-		input.type = 'checkbox';
-		input.value = parties[i].name;
-		input.classListAdd("partyChecker");
+	function partySorter(){
+		// sorts the parties on all, true, false
+		list.innerHTML ="";
+		if (sortparty == "all") {
+			return sortparty = true, addElement(); 
+		}
+		if (sortparty == true) {
+			return sortparty = false, addElement();
+		}
+		if (sortparty == false) {
+			return sortparty = "all", addElement();
 		}
 	}
+
+	function addElement(){
+		 var sortButton = document.createElement('button');
+		 var buttonText = document.createTextNode("sort");
+		 sortButton.appendChild(buttonText);
+		 sortButton.id ="sortButton";
+		 sortButton.onclick = function(){ partySorter(); };
+		 list.appendChild(sortButton);
+
+		// create the checkboxes to the amount of partys
+		if (sortparty == "all") {
+		for (var i = 0; i < getTotalAmountOfPartys(); i++) {
+            var tr = document.createElement('tr');
+            tr.id = "trs";
+            tr.value = parties[i]['name'];
+            list.appendChild(tr);
+            var checkbox = document.createElement('input');
+            var p = document.createElement('p');
+            checkbox.type = 'checkbox';
+            checkbox.value = parties[i]['name'];
+            checkbox.classList.add("resultCheckbox");
+            tr.appendChild(checkbox);
+            var partyname = document.createTextNode(parties[i]['name']);
+            tr.appendChild(p);
+            p.appendChild(partyname);
+            checkbox.addEventListener("change", function (event) {
+            	//pushes party in array in the array when checked
+                if (event.target.checked == true) {
+                    console.log("true")
+                    data.push(event.target.value)
+                    console.log(data);
+                }
+                //deletes the party out of the array
+                if (event.target.checked == false) {
+                    var dtaalength = data.length;
+                    for (var datainfo = 0; datainfo < dtaalength; datainfo++) {
+                        if (event.target.value == data[datainfo]) {
+                            data[datainfo] = null;
+                            console.log(data);
+                        }
+                    }
+                }
+            });
+
+        }
+	}
+			if (sortparty === true || sortparty === false) {
+		for (var i = 0; i < getTotalAmountOfPartys(); i++) {
+			if (parties[i]['secular'] == sortparty) {
+            var tr = document.createElement('tr');
+            tr.id = "trs";
+            tr.value = parties[i]['name'];
+            list.appendChild(tr);
+            var checkbox = document.createElement('input');
+            var p = document.createElement('p');
+            checkbox.type = 'checkbox';
+            checkbox.value = parties[i]['name'];
+            checkbox.classList.add("resultCheckbox");
+            tr.appendChild(checkbox);
+            var partyname = document.createTextNode(parties[i]['name']);
+            tr.appendChild(p);
+            p.appendChild(partyname);
+            checkbox.addEventListener("change", function (event) {
+            	//pushes party in array in the array when checked
+                if (event.target.checked == true) {
+                    console.log("true")
+                    data.push(event.target.value)
+                    console.log(data);
+                }
+                //deletes the party out of the array
+                if (event.target.checked == false) {
+                    var dtaalength = data.length;
+                    for (var datainfo = 0; datainfo < dtaalength; datainfo++) {
+                        if (event.target.value == data[datainfo]) {
+                            data[datainfo] = null;
+                            console.log(data);
+                        }
+                    }
+                }
+            });
+
+        }
+    }
+	}
 }
+
+
+}
+
