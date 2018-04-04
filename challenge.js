@@ -79,6 +79,7 @@ window.onload = function() {
 	}
 
 	function answer(pushedanswer, multiplier = null){
+		// als multi is gekozen dan zet hij hem in de array met antwoord anders een normaal antwoord
 		clearer();
 		if (multiplier === "x2") {
 			multiultraplier[number] = pushedanswer;
@@ -168,6 +169,11 @@ window.onload = function() {
 		 sortButton.id ="sortButton";
 		 sortButton.onclick = function(){ partySorter(); };
 		 list.appendChild(sortButton);
+		 var answerButton = document.createElement('button');
+		 var bText = document.createTextNode("answer");
+		 answerButton.appendChild(bText);
+		 answerButton.id ="answerButton";
+		 list.appendChild(answerButton);
 
 		// create the checkboxes to the amount of partys
 		if (sortparty == "all") {

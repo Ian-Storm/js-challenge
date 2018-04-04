@@ -9,3 +9,10 @@
 #backSection {
 	margin-top: 5px;
 }
+
+tr {
+	display: flex;
+	flex-direction: row;
+	border: 1px solid black;
+	width: 200px;
+}
