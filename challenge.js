@@ -39,6 +39,7 @@ var textarray = [
 ];
 var answers = [];
 var data = [];
+var scoreArray = [];
 var multiultraplier = [];
 var sortparty = "all";
 
@@ -58,15 +59,15 @@ window.onload = function() {
 
 	backBtn.addEventListener("click", changer);
 
-	yes.addEventListener("click", function(){answer("y");});
-	idk.addEventListener("click", function(){answer("i");});
-	no.addEventListener("click", function(){answer("n");});
+	yes.addEventListener("click", function(){answer("pro");});
+	idk.addEventListener("click", function(){answer("ambivalent");});
+	no.addEventListener("click", function(){answer("contra");});
 	skip.addEventListener("click", function(){answer("s");});
 	restart.addEventListener("click", restartt);
 	if (questionWeight.checked){
-		yes.addEventListener("click", function(){answer("y","x2");});
-		idk.addEventListener("click", function(){answer("i","x2");});
-		no.addEventListener("click", function(){answer("n","x2");});
+		yes.addEventListener("click", function(){answer("pro","x2");});
+		idk.addEventListener("click", function(){answer("ambivalent","x2");});
+		no.addEventListener("click", function(){answer("contra","x2");});
 		skip.addEventListener("click", function(){answer("s","x2");});
 		restart.addEventListener("click", restartt);
 	}
@@ -90,6 +91,7 @@ window.onload = function() {
 	}
 
 	function question(){
+		console.log(number)
 		questionAdd();
 		title.innerHTML = ''+ (number+1) + ". " + titlearray[number];
 		text.innerHTML = textarray[number];
@@ -126,6 +128,7 @@ window.onload = function() {
 		if (number < 29) {
 			return number ++;
 		} else if (number == 29) {
+			list.style.display ="block";
 			document.getElementById("mainSection").classList.add("hidden");
 			number++;
 			addElement();
@@ -135,8 +138,10 @@ window.onload = function() {
 	function questionBack(){
 		if (number < 30 && number > -1) {
 			console.log(number);
+			list.style.display ="none";
 			return number--;
 		} else if (number == 30) {
+			list.style.display ="none";
 			number--;
 			document.getElementById("mainSection").classList.remove	("hidden");
 			title.innerHTML = ''+ (number+1) + ". " + titlearray[number];
@@ -164,13 +169,14 @@ window.onload = function() {
 
 	function addElement(){
 		 var sortButton = document.createElement('button');
-		 var buttonText = document.createTextNode("sort");
+		 var buttonText = document.createTextNode("Sorteer");
 		 sortButton.appendChild(buttonText);
 		 sortButton.id ="sortButton";
 		 sortButton.onclick = function(){ partySorter(); };
 		 list.appendChild(sortButton);
 		 var answerButton = document.createElement('button');
-		 var bText = document.createTextNode("answer");
+		 var bText = document.createTextNode("Antwoord");
+		 answerButton.addEventListener("click", function(){answersings();});
 		 answerButton.appendChild(bText);
 		 answerButton.id ="answerButton";
 		 list.appendChild(answerButton);
@@ -250,7 +256,49 @@ window.onload = function() {
         }
     }
 	}
-}
+	}
+
+	function answersings(){
+
+		list.style.display = 'none';
+        //checks if party name is in the data array, if so then there score gets +5;
+        for (var p = 0; p < data.length; p++) {
+            for (var i = 0; i < getTotalAmountOfPartys(); i++) {
+                if (parties[i]['name'] == data[p]) {
+                    scoreboard[i]['score'] = +5;
+                }
+            }
+        }
+        // checks if the answers of the partys is the same as the given answers, if so they get a +1 score for every awnser thats the same
+        for (var q = 0; q < titlearray.length; q++) {
+            for (var i = 0; i < getTotalAmountOfPartys(); i++) {
+                if (partiesThought[q][i]['position'] == answers[q]) {
+                    if (multiultraplier[q] === 'x2') {
+                        scoreboard[i]['score'] = +2;
+                    } else {
+                        scoreboard[i]['score']++;
+                    }
+                } 
+            }
+        }
+        //sorts the partys on score and displays the top 3
+        title.innerHTML = "Uw mening komt het best overeen met :";
+        scoreboard.sort(function (eerste, tweede) {
+            return tweede.score - eerste.score;
+        });
+
+        for (var i = 0; i < getTotalAmountOfPartys(); i++) {
+            scoreArray.push(scoreboard[i]['name']);
+        }
+        
+        var results = scoreArray.slice(0, 3);
+        list.style.display = 'block';
+        backBtn.style.display = 'none';
+        list.innerHTML = results;
+        console.log(results);
+        	console.log(scoreboard);
+    }
+
 
 
 }
